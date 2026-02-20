@@ -16,18 +16,14 @@ router.post(
 );
 
 /*/GET /API/FOOD - get all food items[Protected route]*/
-router.get(
-  "/",
-  authMiddleware.authUserMiddleware,
-  foodController.getAllFoodItems,
-);
+router.get("/", authMiddleware.getAllFoodItems);
 
 /*GET /API/food/FOOD-partner/:id*/
-router.get(
+/*router.get(
   "/",
   authMiddleware.authUserMiddleware,
   foodController.getAllFoodItems,
-);
+);*/
 
 router.post(
   "/like",
