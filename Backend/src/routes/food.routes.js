@@ -16,7 +16,11 @@ router.post(
 );
 
 /*/GET /API/FOOD - get all food items[Protected route]*/
-router.get("/", authMiddleware.getAllFoodItems);
+router.get(
+  "/",
+  authMiddleware.authUserMiddleware,
+  foodController.getAllFoodItems,
+);
 
 /*GET /API/food/FOOD-partner/:id*/
 /*router.get(
