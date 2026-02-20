@@ -69,7 +69,7 @@ const CreateFood = () => {
     formData.append("video", videoFile);
 
     const response = await axios.post(
-      "http://localhost:8000/api/food",
+      `${import.meta.env.VITE_API_URL}/api/food`,
       formData,
       {
         withCredentials: true,

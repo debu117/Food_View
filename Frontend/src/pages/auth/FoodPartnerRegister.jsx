@@ -19,7 +19,7 @@ const FoodPartnerRegister = () => {
 
     axios
       .post(
-        "http://localhost:8000/api/auth/foodpartner/register",
+        `${import.meta.env.VITE_API_URL}/api/auth/foodpartner/register`,
         {
           name: businessName,
           contactName,
