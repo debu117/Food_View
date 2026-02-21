@@ -21,7 +21,7 @@ async function createFood(req, res) {
   });
 }
 
-async function getAllFoodItems(req, res) {
+/*async function getAllFoodItems(req, res) {
   const user = req.user;
 
   const foodItems = await foodModel.find().populate("foodPartner", "name");
@@ -43,8 +43,37 @@ async function getAllFoodItems(req, res) {
   res.status(200).json({
     foodItems: foodWithLikeStatus,
   });
-}
+}*/
 
+async function getAllFoodItems(req, res) {
+  const user = req.user || null;
+
+  const foodItems = await foodModel.find().populate("foodPartner", "name");
+
+  const foodWithLikeStatus = await Promise.all(
+    foodItems.map(async (food) => {
+      let isLiked = false;
+
+      if (user) {
+        const like = await likeModel.findOne({
+          user: user._id,
+          food: food._id,
+        });
+
+        isLiked = !!like;
+      }
+
+      return {
+        ...food.toObject(),
+        isLiked,
+      };
+    }),
+  );
+
+  res.status(200).json({
+    foodItems: foodWithLikeStatus,
+  });
+}
 async function likeFood(req, res) {
   const { foodId } = req.body;
   const user = req.user;
