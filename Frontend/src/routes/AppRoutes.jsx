@@ -5,8 +5,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import axios from "axios";
-import axios from "axios";
+import axios from "../utils/axios";
 axios.defaults.withCredentials = true;
 import UserRegister from "../pages/auth/UserRegister";
 import ChooseRegister from "../pages/auth/ChooseRegister";

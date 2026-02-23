@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/auth-shared.css";
-import axios from "axios";
+import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 
 const FoodPartnerLogin = () => {
