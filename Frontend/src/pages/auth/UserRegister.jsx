@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/auth-shared.css";
-import axios from "../utils/axios";
+import axios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 
 const UserRegister = () => {

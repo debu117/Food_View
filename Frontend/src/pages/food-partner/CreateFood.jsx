@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import axios from "../utils/axios";
+import axios from "../../utils/axios";
 import "../../styles/create-food.css";
 import { useNavigate } from "react-router-dom";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/reels.css";
-import axios from "../utils/axios";
+import axios from "../../utils/axios";
 import ReelFeed from "../../components/ReelFeed";
 
 const Saved = () => {
