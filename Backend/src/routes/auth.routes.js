@@ -9,13 +9,21 @@ router.post("/user/register", authController.registerUser);
 router.post("/user/login", authController.LoginUser);
 router.get("/user/logout", authController.LogoutUser);
 
-// ✅ ADD THIS ROUTE
 router.get("/user/me", authMiddleware.authUserMiddleware, (req, res) => {
   res.status(200).json({
     user: req.user,
   });
 });
-
+// ✅ ADD THIS FOR FOOD PARTNER
+router.get(
+  "/foodpartner/me",
+  authMiddleware.authFoodPartnermiddleware,
+  (req, res) => {
+    res.status(200).json({
+      foodPartner: req.foodPartner,
+    });
+  },
+);
 // ================= FOOD PARTNER AUTH =================
 
 router.post("/foodpartner/register", authController.registerFoodPartner);
