@@ -22,24 +22,24 @@ function AppRoutes() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("/auth/user/me") // ✅ FIXED
-      .then(() => {
+    const checkAuth = async () => {
+      try {
+        await axios.get("/auth/user/me");
         setIsLoggedIn(true);
-      })
-      .catch(() => {
+      } catch {
         setIsLoggedIn(false);
-      });
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  if (isLoggedIn === null) {
-    return <div>Loading...</div>;
-  }
+  if (isLoggedIn === null) return null;
 
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+        {/* Public */}
         <Route path="/register" element={<ChooseRegister />} />
         <Route path="/user/register" element={<UserRegister />} />
         <Route path="/user/login" element={<UserLogin />} />
@@ -49,7 +49,7 @@ function AppRoutes() {
         />
         <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
 
-        {/* Protected User Routes */}
+        {/* Protected */}
         <Route
           path="/"
           element={
@@ -59,7 +59,7 @@ function AppRoutes() {
                 <BottomNav />
               </>
             ) : (
-              <Navigate to="/user/login" />
+              <Navigate to="/user/login" replace />
             )
           }
         />
@@ -73,16 +73,19 @@ function AppRoutes() {
                 <BottomNav />
               </>
             ) : (
-              <Navigate to="/user/login" />
+              <Navigate to="/user/login" replace />
             )
           }
         />
 
-        {/* Protected Food Partner Route */}
         <Route
           path="/create-food"
           element={
-            isLoggedIn ? <CreateFood /> : <Navigate to="/food-partner/login" />
+            isLoggedIn ? (
+              <CreateFood />
+            ) : (
+              <Navigate to="/food-partner/login" replace />
+            )
           }
         />
 
