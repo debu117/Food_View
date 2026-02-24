@@ -152,7 +152,8 @@ async function LoginFoodPartner(req, res) {
   res.cookie("token", token, {
     httpOnly: true,
     secure: true, // REQUIRED in production
-    sameSite: "none", // REQUIRED for cross-domain
+    sameSite: "none",
+    // REQUIRED for cross-domain
   });
   res.status(200).json({
     message: "Food partner logged in successfully",

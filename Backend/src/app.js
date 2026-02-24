@@ -8,8 +8,10 @@ const app = express();
 // ✅ CORS MUST COME FIRST
 app.use(
   cors({
-    //  origin: "http://localhost:5173",
-    origin: process.env.FRONTEND_URL,
+    origin: [
+      "https://food-view-gamma.vercel.app",
+      "https://food-view-git-main-debu117s-projects.vercel.app",
+    ],
     credentials: true,
   }),
 );
