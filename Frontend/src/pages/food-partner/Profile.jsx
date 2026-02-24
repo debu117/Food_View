@@ -44,9 +44,7 @@ const Profile = () => {
         <div className="profile-stats">
           <div className="profile-stat">
             <span className="profile-stat-label">total meals</span>
-            <span className="profile-stat-value">
-              {profile?.totalMeals || 0}
-            </span>
+            <span className="profile-stat-value">{videos.length}</span>
           </div>
 
           <div className="profile-stat">
