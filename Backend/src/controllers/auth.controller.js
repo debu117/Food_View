@@ -87,46 +87,47 @@ async function LogoutUser(req, res) {
   });
 }
 async function registerFoodPartner(req, res) {
-  const { name, email, password, contactName, phone, address } = req.body;
-  const isAccountAlreadyExist = await foodpartnerModel.findOne({ email });
-  if (isAccountAlreadyExist) {
-    return res.status(400).json({
-      message: "Account already exist with this email",
+  try {
+    const { name, email, password, contactName, phone, address } = req.body;
+
+    if (!name || !email || !password || !contactName || !phone || !address) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const isAccountAlreadyExist = await foodpartnerModel.findOne({ email });
+    if (isAccountAlreadyExist) {
+      return res.status(400).json({
+        message: "Account already exist with this email",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const foodPartner = await foodpartnerModel.create({
+      name,
+      email,
+      password: hashedPassword,
+      contactName,
+      phone,
+      address,
     });
+
+    const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    res.status(201).json({
+      message: "Food partner registered successfully",
+      foodPartner,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const foodPartner = await foodpartnerModel.create({
-    name,
-    email,
-    password: hashedPassword,
-    contactName,
-    phone,
-    address,
-  });
-
-  const token = jwt.sign(
-    {
-      id: foodPartner._id,
-    },
-    process.env.JWT_SECRET,
-  );
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
-  res.status(201).json({
-    message: "Food partner registered successfully",
-    foodPartner: {
-      id: foodPartner._id,
-      email: foodPartner.email,
-      name: foodPartner.name,
-      contactName: foodPartner.contactName,
-      phone: foodPartner.phone,
-      address: foodPartner.address,
-    },
-  });
 }
 
 async function LoginFoodPartner(req, res) {
