@@ -8,8 +8,8 @@ const BottomNav = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/logout");
-      navigate("/user/login"); // redirect after logout
+      await axios.post("/auth/logout");
+      navigate("/user/login");
     } catch (error) {
       console.log("Logout error:", error);
     }
