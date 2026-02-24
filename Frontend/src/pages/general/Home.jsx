@@ -10,30 +10,18 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/api/food`, {
-        withCredentials: true,
-      })
+      .get("/food")
       .then((response) => {
-        console.log(response.data);
-
         setVideos(response.data.foodItems);
       })
-      .catch(() => {
-        /* noop: optionally handle error */
-      });
+      .catch(() => {});
   }, []);
-
-  // Using local refs within ReelFeed; keeping map here for dependency parity if needed
 
   async function likeVideo(item) {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/food/like`,
-        { foodId: item._id },
-        { withCredentials: true },
-      );
-
-      console.log("LIKE RESPONSE:", response.data);
+      const response = await axios.post("/food/like", {
+        foodId: item._id,
+      });
 
       setVideos((prev) =>
         prev.map((v) =>
@@ -47,40 +35,27 @@ const Home = () => {
         ),
       );
     } catch (err) {
-      console.log("LIKE ERROR:", err);
+      console.log(err);
     }
   }
 
-  /*else {
-      console.log("Video unliked");
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id ? { ...v, likeCount: v.likeCount - 1 } : v,
-        ),
-      );
-    }
-  }*/
-
   async function saveVideo(item) {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/food/save`,
-      { foodId: item._id },
-      { withCredentials: true },
-    );
+    const response = await axios.post("/food/save", {
+      foodId: item._id,
+    });
 
-    if (response.data.save) {
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id ? { ...v, savesCount: v.savesCount + 1 } : v,
-        ),
-      );
-    } else {
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id ? { ...v, savesCount: v.savesCount - 1 } : v,
-        ),
-      );
-    }
+    setVideos((prev) =>
+      prev.map((v) =>
+        v._id === item._id
+          ? {
+              ...v,
+              savesCount: response.data.save
+                ? v.savesCount + 1
+                : v.savesCount - 1,
+            }
+          : v,
+      ),
+    );
   }
 
   return (
