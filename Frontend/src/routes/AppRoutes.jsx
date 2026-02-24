@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import axios from "../utils/axios";
-axios.defaults.withCredentials = true;
+
 import UserRegister from "../pages/auth/UserRegister";
 import ChooseRegister from "../pages/auth/ChooseRegister";
 import UserLogin from "../pages/auth/UserLogin";
@@ -23,9 +23,7 @@ function AppRoutes() {
 
   useEffect(() => {
     axios
-      .get("https://food-view-x2nr.onrender.com/api/auth/user/me", {
-        withCredentials: true,
-      })
+      .get("/auth/user/me") // ✅ FIXED
       .then(() => {
         setIsLoggedIn(true);
       })
@@ -41,6 +39,7 @@ function AppRoutes() {
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
         <Route path="/register" element={<ChooseRegister />} />
         <Route path="/user/register" element={<UserRegister />} />
         <Route path="/user/login" element={<UserLogin />} />
@@ -50,6 +49,7 @@ function AppRoutes() {
         />
         <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
 
+        {/* Protected User Routes */}
         <Route
           path="/"
           element={
@@ -78,6 +78,7 @@ function AppRoutes() {
           }
         />
 
+        {/* Protected Food Partner Route */}
         <Route
           path="/create-food"
           element={
