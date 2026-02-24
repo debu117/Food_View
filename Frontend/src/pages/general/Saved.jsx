@@ -7,11 +7,10 @@ const Saved = () => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/food/save`, {
-        withCredentials: true,
-      })
-      .then((response) => {
+    const fetchSaved = async () => {
+      try {
+        const response = await axios.get("/food/save");
+
         const savedFoods = response.data.savedFoods.map((item) => ({
           _id: item.food._id,
           video: item.food.video,
@@ -21,26 +20,25 @@ const Saved = () => {
           commentsCount: item.food.commentsCount,
           foodPartner: item.food.foodPartner,
         }));
+
         setVideos(savedFoods);
-      });
+      } catch (err) {
+        console.error("Error fetching saved foods:", err);
+      }
+    };
+
+    fetchSaved();
   }, []);
 
   const removeSaved = async (item) => {
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/food/save`,
-        { foodId: item._id },
-        { withCredentials: true },
-      );
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id
-            ? { ...v, savesCount: Math.max(0, (v.savesCount ?? 1) - 1) }
-            : v,
-        ),
-      );
-    } catch {
-      // noop
+      await axios.post("/food/save", {
+        foodId: item._id,
+      });
+
+      setVideos((prev) => prev.filter((v) => v._id !== item._id));
+    } catch (err) {
+      console.error("Error removing saved:", err);
     }
   };
 
