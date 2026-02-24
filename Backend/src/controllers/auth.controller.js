@@ -172,6 +172,18 @@ async function LogoutFoodPartner(req, res) {
   });
 }
 
+async function logout(req, res) {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true, // true in production
+    sameSite: "None",
+  });
+
+  res.status(200).json({
+    message: "Logged out successfully",
+  });
+}
+
 module.exports = {
   registerUser,
   LoginUser,
@@ -179,4 +191,5 @@ module.exports = {
   registerFoodPartner,
   LoginFoodPartner,
   LogoutFoodPartner,
+  logout,
 };
