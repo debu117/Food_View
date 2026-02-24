@@ -1,5 +1,6 @@
 const foodPartnerModel = require("../models/foodpartner.model");
 const foodModel = require("../models/food.model");
+const { getAllFoodItems } = require("./food.controller");
 async function getFoodPartnerById(req, res) {
   const foodPartnerId = req.params.id;
 
@@ -17,7 +18,7 @@ async function getFoodPartnerById(req, res) {
     message: "Food partner details fetched successfully",
     foodPartner: {
       ...foodPartner.toObject(),
-      foodItmes: foodItemsByFoodPartner,
+      foodItems: foodItemsByFoodPartner,
     },
   });
 }
