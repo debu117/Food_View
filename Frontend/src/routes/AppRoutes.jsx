@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/*import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -39,8 +39,8 @@ function AppRoutes() {
   return (
     <Router>
       <Routes>
-        {/* Public */}
-        <Route path="/register" element={<ChooseRegister />} />
+        {/* Public Routes }
+       /* <Route path="/register" element={<ChooseRegister />} />
         <Route path="/user/register" element={<UserRegister />} />
         <Route path="/user/login" element={<UserLogin />} />
         <Route
@@ -49,8 +49,8 @@ function AppRoutes() {
         />
         <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
 
-        {/* Protected */}
-        <Route
+        {/* Protected }*/
+/* <Route
           path="/"
           element={
             isLoggedIn ? (
@@ -89,6 +89,115 @@ function AppRoutes() {
           }
         />
 
+        <Route path="/food-partner/:id" element={<Profile />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default AppRoutes;
+*/
+
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import axios from "../utils/axios";
+
+import UserRegister from "../pages/auth/UserRegister";
+import ChooseRegister from "../pages/auth/ChooseRegister";
+import UserLogin from "../pages/auth/UserLogin";
+import FoodPartnerRegister from "../pages/auth/FoodPartnerRegister";
+import FoodPartnerLogin from "../pages/auth/FoodPartnerLogin";
+import Home from "../pages/general/Home";
+import Saved from "../pages/general/Saved";
+import BottomNav from "../components/BottomNav";
+import CreateFood from "../pages/food-partner/CreateFood";
+import Profile from "../pages/food-partner/Profile";
+
+function AppRoutes() {
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await axios.get("/auth/user/me", { withCredentials: true });
+        setUserLoggedIn(true);
+      } catch {}
+
+      try {
+        await axios.get("/auth/foodpartner/me", { withCredentials: true });
+        setPartnerLoggedIn(true);
+      } catch {}
+
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/register" element={<ChooseRegister />} />
+        <Route path="/user/register" element={<UserRegister />} />
+        <Route path="/user/login" element={<UserLogin />} />
+        <Route
+          path="/food-partner/register"
+          element={<FoodPartnerRegister />}
+        />
+        <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
+
+        {/* User Protected Routes */}
+        <Route
+          path="/"
+          element={
+            userLoggedIn ? (
+              <>
+                <Home />
+                <BottomNav />
+              </>
+            ) : (
+              <Navigate to="/user/login" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/saved"
+          element={
+            userLoggedIn ? (
+              <>
+                <Saved />
+                <BottomNav />
+              </>
+            ) : (
+              <Navigate to="/user/login" replace />
+            )
+          }
+        />
+
+        {/* Food Partner Protected Route */}
+        <Route
+          path="/create-food"
+          element={
+            partnerLoggedIn ? (
+              <CreateFood />
+            ) : (
+              <Navigate to="/food-partner/login" replace />
+            )
+          }
+        />
+
+        {/* Public Partner Profile */}
         <Route path="/food-partner/:id" element={<Profile />} />
       </Routes>
     </Router>
